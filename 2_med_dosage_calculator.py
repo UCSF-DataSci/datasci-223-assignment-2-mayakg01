@@ -229,7 +229,7 @@ def main():
     print("Medication Dosages:")
     for patient in patients_with_dosages:
         # BUG: No check if required keys exist
-        # FIX: Setting a default or 'unknown' value if the keys do not exist
+        # FIX: Setting a default or 'unknown' or false value if the keys do not exist
         name = patient.get('name', 'Unknown')
         medication = patient.get('medication', 'Unknown')
         base_dosage = patient.get('base_dosage', 0.0)

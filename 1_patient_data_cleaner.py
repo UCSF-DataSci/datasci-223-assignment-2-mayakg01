@@ -90,7 +90,7 @@ def clean_patient_data(patients):
         patient = patient.drop_duplicates()
         
         # BUG: Wrong comparison operator (= vs ==)
-        # FIX: Changed comparison operator to valid operator
+        # FIX: Changed comparison operator to valid operator >=
         if patient['age'] >= 18:
             # BUG: Logic error - keeps patients under 18 instead of filtering them out
             # FIX: Changed operator so that only patients >= 18 are appended to cleaned_patients
