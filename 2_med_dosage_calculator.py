@@ -119,12 +119,12 @@ def calculate_dosage(patient):
     # Extract patient information
     # BUG: No check if 'weight' key exists
     # FIX: Raise an error if weight is not found, all patients should have weight recorded in their data
-    if weight not in patient:
+    if 'weight' not in patient:
         raise KeyError("Missing 'weight' information in patient data")
     weight = patient['weight']
     # BUG: No check if 'medication' key exists
     # FIX: Raise an error if medication is not found, cannot calculate dosage without medication recorded
-    if medication not in patient:
+    if 'medication' not in patient:
         raise KeyError("Missing 'medication' information in patient data")
     medication = patient['medication'] # This bug is diabolical
     
@@ -141,10 +141,9 @@ def calculate_dosage(patient):
     # Determine if loading dose should be applied
     # BUG: No check if 'is_first_dose' key exists
     # FIX: if/else statement to only use is_first_dose if the key actually exists
-    if is_first_dose in patient:
+    if 'is_first_dose' in patient:
         is_first_dose = patient['is_first_dose']
     else: is_first_dose = False
-    #is_first_dose = patient.get('is_first_dose', False)
     loading_dose_applied = False
     final_dosage = base_dosage
     
@@ -191,7 +190,7 @@ def calculate_all_dosages(patients):
     patients_with_dosages = []
     
     # Process all patients
-    for patient in patients:
+    for patient in patients or []:
         # Calculate dosage for this patient
         patient_with_dosage = calculate_dosage(patient)
         
@@ -213,7 +212,7 @@ def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     
     # Construct the path to the data file
-    data_path = os.path.join(script_dir, 'data', 'meds.json')
+    data_path = os.path.join(script_dir, 'data/raw', 'meds.json')
     
     # BUG: No error handling for load_patient_data failure
     # FIX: Try/except clause to raise an error if patient data is not loaded in
@@ -231,11 +230,13 @@ def main():
         # BUG: No check if required keys exist
         # FIX: Setting a default or 'unknown' or false value if the keys do not exist
         name = patient.get('name', 'Unknown')
+        weight = patient.get('weight', 'Unknown')
         medication = patient.get('medication', 'Unknown')
         base_dosage = patient.get('base_dosage', 0.0)
+        is_first_dose = patient.get('is_first_dose', False)
         final_dosage = patient.get('final_dosage', 0.0)
         loading_dose_applied = patient.get('loading_dose_applied', False)
-        print(f"Name: {patient['name']}, Medication: {patient['medication']}, "
+        print(f"Name: {patient['name']}, Weight: {patient['weight']}, Medication: {patient['medication']}, "
               f"Base Dosage: {patient['base_dosage']:.2f} mg, "
               f"Final Dosage: {patient['final_dosage']:.2f} mg")
         if patient['loading_dose_applied']:

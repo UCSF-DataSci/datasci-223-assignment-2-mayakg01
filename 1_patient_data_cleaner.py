@@ -75,7 +75,7 @@ def clean_patient_data(patients):
         list: Cleaned list of patient dictionaries
     """
     cleaned_patients = []
-    
+    seen = set()
     for patient in patients:
         # BUG: Typo in key 'nage' instead of 'name'
         # FIX: Changed 'nage' spelling to 'name'
@@ -83,11 +83,7 @@ def clean_patient_data(patients):
         
         # BUG: Wrong method name (fill_na vs fillna)
         # FIX: Changed method name to fillna()
-        patient['age'] = patient['age'].fillna(0)
-        
-        # BUG: Wrong method name (drop_duplcates vs drop_duplicates)
-        # FIX: Corrected method spelling
-        patient = patient.drop_duplicates()
+        patient['age'] = int(patient.get('age', 0))
         
         # BUG: Wrong comparison operator (= vs ==)
         # FIX: Changed comparison operator to valid operator >=
@@ -95,6 +91,11 @@ def clean_patient_data(patients):
             # BUG: Logic error - keeps patients under 18 instead of filtering them out
             # FIX: Changed operator so that only patients >= 18 are appended to cleaned_patients
 
+            # BUG: Wrong method name (drop_duplcates vs drop_duplicates)
+            # FIX: Drop duplicates didn't work on a list, modified the method
+            identifier = tuple(sorted(patient.items()))
+            if identifier not in seen:
+                seen.add(identifier)
             cleaned_patients.append(patient)
     
     # BUG: Missing return statement for empty list
