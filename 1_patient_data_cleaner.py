@@ -52,7 +52,7 @@ def load_patient_data(filepath):
         list: List of patient dictionaries
     """
     # BUG: No error handling for file not found
-    # FIX: added in a try/except clause to print "Error: file not found" in the case that the file is not found
+    # FIX: Added in a try/except clause to print "Error: file not found" in the case that the file is not found
     try:
         with open(filepath, 'r') as file:
             return json.load(file)

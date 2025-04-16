@@ -216,7 +216,7 @@ def main():
     data_path = os.path.join(script_dir, 'data', 'meds.json')
     
     # BUG: No error handling for load_patient_data failure
-    # FIX: Try/except clause if patient data is not loaded in
+    # FIX: Try/except clause to raise an error if patient data is not loaded in
     try:
         patients = load_patient_data(data_path)
     except FileNotFoundError:
